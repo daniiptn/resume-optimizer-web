@@ -90,15 +90,58 @@ function App() {
       {error && <p style={{ color: "red" }}>{error}</p>}
 
       {/* ----- Result card ----- */}
+
       {result && (
-        <div style={{ marginTop: "1rem", padding: "1rem", border: "1px solid #ccc" }}>
-          <h2>Result</h2>
+        <div
+          style={{
+            marginTop: "2rem",
+            padding: "1.5rem",
+            border: "1px solid #ccc",
+            borderRadius: "8px",
+            backgroundColor: "#fafafa",
+          }}
+        >
+          <h2 style={{ marginTop: 0 }}>Optimization Result</h2>
           <p><strong>Filename:</strong> {result.filename}</p>
           <p><strong>Filesize:</strong> {(result.filesize / 1024).toFixed(1)} KB</p>
-          <p><strong>Supabase URL:</strong> <a href={result.supabase_url} target="_blank">{result.supabase_url}</a></p>
-          <blockquote>{result.job_description}</blockquote>
+
+          {result.supabase_url && (
+            <p>
+              <strong>Stored File:</strong>{" "}
+              <a href={result.supabase_url} target="_blank" rel="noopener noreferrer">
+                View in Supabase
+              </a>
+            </p>
+          )}
+
+          <div style={{ marginTop: "1rem" }}>
+            <p><strong>Job Description snippet:</strong></p>
+            <blockquote
+              style={{
+                backgroundColor: "#fff",
+                borderLeft: "4px solid #007acc",
+                padding: "0.5rem 1rem",
+                fontStyle: "italic",
+              }}
+            >
+              {result.job_description}
+            </blockquote>
+          </div>
         </div>
       )}
+
+      <div style={{ marginTop: "2rem" }}>
+        <h3>Planned Features</h3>
+        <ul>
+          <li>✅ Store CV in Supabase</li>
+          <li>⬜ AI-Optimized Resume Text</li>
+          <li>⬜ ATS Compatibility Score</li>
+          <li>⬜ Improvement Recommendations</li>
+          <li>⬜ Version History & Comparison</li>
+          <li>⬜ Export as PDF (template-based)</li>
+        </ul>
+      </div>
+
     </div>
   );
 }
