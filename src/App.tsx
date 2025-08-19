@@ -95,7 +95,7 @@ function App() {
           <h2>Result</h2>
           <p><strong>Filename:</strong> {result.filename}</p>
           <p><strong>Filesize:</strong> {(result.filesize / 1024).toFixed(1)} KB</p>
-          <p><strong>Job Description snippet:</strong></p>
+          <p><strong>Supabase URL:</strong> <a href={result.supabase_url} target="_blank">{result.supabase_url}</a></p>
           <blockquote>{result.job_description}</blockquote>
         </div>
       )}
