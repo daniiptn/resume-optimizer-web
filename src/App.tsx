@@ -1,49 +1,66 @@
+// ✅ Imports: always at the very top
 import { useState } from "react";
 
-function App() {
-  const [cv, setCv] = useState<File | null>(null);
-  const [jd, setJd] = useState("");
-  const [result, setResult] = useState<string>("");
+// ✅ Type definition: describing the "shape" of the result
+type Result = {
+  filename: string;
+  filesize: number;
+  job_description: string;
+};
 
+// ✅ The component: everything between function App() { ... } is "your app"
+function App() {
+  // ----- State variables -----
+  const [cv, setCv] = useState<File | null>(null); // file input
+  const [jd, setJd] = useState("");                // job description text
+  const [result, setResult] = useState<Result | null>(null); // response from backend
+  const [error, setError] = useState<string>("");            // error messages
+
+  // ----- Function that runs when the form is submitted -----
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!cv || !jd) {
-      alert("Please upload a CV and paste a job description.");
-      return;
+    e.preventDefault();        // stop page refresh
+    setError("");              // clear old errors
+    setResult(null);           // clear old result
+
+    if (!cv || !jd) {          // check if both inputs are provided
+      setError("Please upload a CV and paste a job description.");
+      return; // stop here if inputs are missing
     }
 
-    const formData = new FormData();
+    const formData = new FormData(); // browser built-in helper for sending files
     formData.append("cv", cv);
     formData.append("jd", jd);
 
     try {
+      // ----- Call the backend API -----
       const response = await fetch(
         "https://resume-optimizer-api-production.up.railway.app/optimize",
-        {
-          method: "POST",
-          body: formData,
-        }
+        { method: "POST", body: formData }
       );
 
-      if (!response.ok) {
-        throw new Error("Request failed");
-      }
+      if (!response.ok) throw new Error("Request failed");
 
+      // Convert response to JSON
       const data = await response.json();
-      setResult(JSON.stringify(data, null, 2));
+
+      // Save into React state
+      setResult(data);
     } catch (err: any) {
-      setResult("Error: " + err.message);
+      setError("Error: " + err.message);
     }
   };
 
+  // ----- What the component "renders" on the page -----
   return (
-    <div style={{ fontFamily: "sans-serif", padding: "2rem" }}>
+    <div style={{ fontFamily: "sans-serif", padding: "2rem", maxWidth: "600px" }}>
       <h1>Resume Optimizer Web</h1>
 
+      {/* ----- The form ----- */}
       <form onSubmit={handleSubmit} style={{ marginBottom: "1rem" }}>
-        <div>
+        {/* CV upload */}
+        <div style={{ marginBottom: "1rem" }}>
           <label>
-            Upload CV:
+            <strong>Upload CV:</strong>
             <input
               type="file"
               accept=".pdf,.doc,.docx,.txt,.rtf"
@@ -52,27 +69,39 @@ function App() {
           </label>
         </div>
 
-        <div style={{ marginTop: "1rem" }}>
+        {/* JD textarea */}
+        <div style={{ marginBottom: "1rem" }}>
           <label>
-            Job Description:
+            <strong>Job Description:</strong>
             <textarea
               rows={5}
               cols={50}
               value={jd}
               onChange={(e) => setJd(e.target.value)}
+              style={{ width: "100%", marginTop: "0.5rem" }}
             />
           </label>
         </div>
 
-        <button type="submit" style={{ marginTop: "1rem" }}>
-          Optimize
-        </button>
+        <button type="submit">Optimize</button>
       </form>
 
-      <h2>Result:</h2>
-      <pre>{result}</pre>
+      {/* ----- Error message ----- */}
+      {error && <p style={{ color: "red" }}>{error}</p>}
+
+      {/* ----- Result card ----- */}
+      {result && (
+        <div style={{ marginTop: "1rem", padding: "1rem", border: "1px solid #ccc" }}>
+          <h2>Result</h2>
+          <p><strong>Filename:</strong> {result.filename}</p>
+          <p><strong>Filesize:</strong> {(result.filesize / 1024).toFixed(1)} KB</p>
+          <p><strong>Job Description snippet:</strong></p>
+          <blockquote>{result.job_description}</blockquote>
+        </div>
+      )}
     </div>
   );
 }
 
+// ✅ Export: always at the bottom
 export default App;
