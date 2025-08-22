@@ -35,60 +35,71 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-6">
+    <div style={{ minHeight: "100vh", background: "#111827", color: "#fff", padding: "24px" }}>
       {/* Centered container */}
-      <div className="max-w-2xl mx-auto space-y-8">
-        
-        <h1 style={{ color: "red" }}>DEBUG CHECK</h1>
-
-        <h1 className="text-3xl font-bold mb-6 text-center">Resume Optimizer Web</h1>
+      <div style={{ maxWidth: 800, margin: "0 auto" }}>
+        <h1 style={{ fontSize: 36, fontWeight: 800, textAlign: "center", marginBottom: 24 }}>
+          Resume Optimizer Web
+        </h1>
   
-        {/* Upload Form Block */}
-        <div className="bg-white text-black p-6 rounded shadow-md">
-          <form onSubmit={handleSubmit} className="space-y-4">
+        {/* Upload Form Block (white card) */}
+        <div style={{ background: "#fff", color: "#111", padding: 24, borderRadius: 10, boxShadow: "0 2px 12px rgba(0,0,0,.2)", marginBottom: 24 }}>
+          <form onSubmit={handleSubmit} style={{ display: "grid", gap: 16 }}>
             <div>
-              <label className="block font-medium mb-1">Upload CV:</label>
-              <input
-                type="file"
-                onChange={(e) => setCv(e.target.files?.[0] || null)}
-                className="text-black"
-              />
+              <label style={{ display: "block", fontWeight: 600, marginBottom: 6 }}>Upload CV:</label>
+              <input type="file" onChange={(e) => setCv(e.target.files?.[0] || null)} />
             </div>
   
             <div>
-              <label className="block font-medium mb-1">Job Description:</label>
+              <label style={{ display: "block", fontWeight: 600, marginBottom: 6 }}>Job Description:</label>
               <textarea
                 value={jd}
                 onChange={(e) => setJd(e.target.value)}
-                className="w-full h-32 text-black p-2 rounded border"
+                style={{ width: "100%", height: 140, padding: 10, borderRadius: 6, border: "1px solid #ddd" }}
               />
             </div>
   
             <button
               type="submit"
               disabled={loading}
-              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded text-white"
+              style={{
+                alignSelf: "start",
+                padding: "10px 16px",
+                background: "#2563eb",
+                color: "#fff",
+                border: 0,
+                borderRadius: 6,
+                cursor: "pointer"
+              }}
             >
               {loading ? "Optimizing..." : "Optimize"}
             </button>
           </form>
         </div>
   
-        {/* Result Block */}
+        {/* Result Block (white card) */}
         {result && (
-          <div className="bg-white text-black p-6 rounded shadow-md">
-            <h2 className="text-xl font-bold mb-4">Optimization Result</h2>
+          <div style={{ background: "#fff", color: "#111", padding: 24, borderRadius: 10, boxShadow: "0 2px 12px rgba(0,0,0,.2)", marginBottom: 24 }}>
+            <h2 style={{ marginTop: 0, fontSize: 22, fontWeight: 700 }}>Optimization Result</h2>
             <p><strong>Filename:</strong> {result.filename}</p>
             <p><strong>Filesize:</strong> {(result.filesize / 1024).toFixed(1)} KB</p>
   
             {result.supabase_url ? (
-              <p className="mt-2">
+              <p>
                 <strong>Stored File:</strong>{" "}
                 <a
                   href={result.supabase_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-block px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
+                  style={{
+                    display: "inline-block",
+                    padding: "6px 10px",
+                    background: "#2563eb",
+                    color: "#fff",
+                    borderRadius: 6,
+                    textDecoration: "none",
+                    fontWeight: 600
+                  }}
                 >
                   View Uploaded CV
                 </a>
@@ -97,16 +108,19 @@ function App() {
               <p><strong>Stored File:</strong> Not available</p>
             )}
   
-            <p className="mt-2">
-              <strong>Job Description snippet:</strong> {result.job_description}
-            </p>
+            <div style={{ marginTop: 12 }}>
+              <p><strong>Job Description snippet:</strong></p>
+              <blockquote style={{ background: "#f9fafb", borderLeft: "4px solid #2563eb", margin: 0, padding: "8px 12px", fontStyle: "italic" }}>
+                {result.job_description}
+              </blockquote>
+            </div>
           </div>
         )}
   
-        {/* Planned Features */}
-        <div className="bg-gray-800 p-6 rounded shadow-md">
-          <h3 className="text-lg font-semibold mb-2">Planned Features</h3>
-          <ul className="list-disc pl-6 space-y-1 text-gray-300">
+        {/* Planned Features (dark card) */}
+        <div style={{ background: "#1f2937", color: "#e5e7eb", padding: 24, borderRadius: 10, boxShadow: "0 2px 12px rgba(0,0,0,.2)" }}>
+          <h3 style={{ marginTop: 0 }}>Planned Features</h3>
+          <ul style={{ margin: 0, paddingLeft: 20, lineHeight: 1.8 }}>
             <li>✅ Store CV in Supabase</li>
             <li>⬜ AI-Optimized Resume Text</li>
             <li>⬜ ATS Compatibility Score</li>
@@ -118,6 +132,7 @@ function App() {
       </div>
     </div>
   );
+  
   
   
 }
