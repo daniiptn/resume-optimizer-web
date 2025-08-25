@@ -1,8 +1,4 @@
-<div className="h-10 w-10 bg-red-500"></div>
-
-
 import { useState } from "react";
-
 
 type Result = {
   filename: string;
@@ -20,7 +16,7 @@ function App() {
   const [error, setError] = useState<string>("");
 
   // ---- Backend URL from .env ----
-  const API_URL = import.meta.env.VITE_API_URL;
+  const API_URL = import.meta.env.VITE_API_URL || "https://resume-optimizer-api-production.up.railway.app";
 
   // ---- Handlers ----
   const handleSubmit = async (e: React.FormEvent) => {
